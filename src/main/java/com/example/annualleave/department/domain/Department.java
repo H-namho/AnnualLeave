@@ -20,9 +20,9 @@ public class Department {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name;
+    private String departmentName;
 
     public Department(String name) {
-        this.name = name;
+        this.departmentName=name;
     }
 }

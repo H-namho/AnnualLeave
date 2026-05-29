@@ -1,15 +1,12 @@
-package com.example.annualleave.app.auth;
+package com.example.annualleave.app.auth.service;
 
+import com.example.annualleave.app.auth.MailService;
 import com.example.annualleave.app.auth.dto.ReqInvite;
 import com.example.annualleave.auth.domain.Invitation;
 import com.example.annualleave.auth.domain.InvitationRepo;
-import com.example.annualleave.auth.domain.UserRepo;
 import com.example.annualleave.department.domain.Department;
 import com.example.annualleave.department.domain.DepartmentRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -38,9 +35,10 @@ public class WAdminService {
                                         .orElseThrow(()-> new NoSuchElementException("해당 부서를 찾을 수 없습니다"));
        String token = UUID.randomUUID().toString();
        String hashToken = hash(token);
+
        LocalDateTime expires = LocalDateTime.now().plusHours(1);
        Invitation invitation = new Invitation(reqInvite.email(), reqInvite.name(), reqInvite.employeeNumber()
-               ,reqInvite.hireDate(),reqInvite.role(),department,hashToken,expires);
+               ,reqInvite.hireDate(),reqInvite.role(),department);
        String link = "http://localhost:5173/signup?token=" + token;
        invitationRepo.save(invitation);
 
@@ -58,8 +56,10 @@ public class WAdminService {
            byte[] hashed =digest.digest(token.getBytes(StandardCharsets.UTF_8));
            return HexFormat.of().formatHex(hashed);
        } catch (NoSuchAlgorithmException e) {
-           throw new IllegalStateException("토큰암호화에 실패했습니다..", e);
+           throw new IllegalStateException("토큰암호화에 실패했습니다.", e);
        }
    }
+
+
 
 }

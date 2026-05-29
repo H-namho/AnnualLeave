@@ -47,24 +47,18 @@ public class Invitation {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    @Column(nullable = false, unique = true)
-    private String tokenHash;
-
-    @Column(nullable = false)
-    private LocalDateTime expiresAt;
 
     private LocalDateTime usedAt;
 
     public Invitation(String email, String name, String employeeNumber, LocalDate hireDate,
-                      UserRole role, Department department, String tokenHash, LocalDateTime expiresAt) {
+                      UserRole role, Department department) {
         this.email = email;
         this.name = name;
         this.employeeNumber = employeeNumber;
         this.hireDate = hireDate;
         this.role = role;
         this.department = department;
-        this.tokenHash = tokenHash;
-        this.expiresAt = expiresAt;
+
     }
 
     public void markUsed(LocalDateTime usedAt) {
